@@ -1,0 +1,25 @@
+{
+    "schemaVersion": 1,
+    "id": "unmending",
+    "version": "${version}",
+    "name": "unmending",
+    "description": "A simple port of the unmending mod by Vazkii",
+    "authors": ["Txuritan"],
+    "contact": {
+        "repo": "https://github.com/Txuritan/unmending"
+    },
+    "license": "MIT",
+    "icon": "assets/unmending/icon.png",
+    "environment": "*",
+    "entrypoints": {
+        "main": ["dev.txuritan.unmending.Unmending"]
+    },
+    "mixins": [
+        "unmending.mixins.json"
+    ],
+    "depends": {
+        "fabricloader": ">=${loader_version}",
+        "fabric": "*",
+        "minecraft": "${minecraft_version}"
+    }
+}
