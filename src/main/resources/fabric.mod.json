@@ -6,7 +6,9 @@
     "description": "A simple port of the unmending mod by Vazkii",
     "authors": ["Txuritan"],
     "contact": {
-        "repo": "https://github.com/Txuritan/unmending"
+        "repo": "https://github.com/Txuritan/unmending",
+        "sources": "https://github.com/Txuritan/unmending",
+        "issues": "https://github.com/Txuritan/unmending/issues"
     },
     "license": "MIT",
     "icon": "assets/unmending/icon.png",
