@@ -1,14 +1,15 @@
 package dev.txuritan.unmending.mixins;
 
-import dev.txuritan.unmending.api.events.AnvilUpdateEvent;
-
 import com.llamalad7.mixinextras.sugar.Local;
-
+import dev.txuritan.unmending.api.events.AnvilUpdateEvent;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.screen.*;
+import net.minecraft.screen.AnvilScreenHandler;
+import net.minecraft.screen.ForgingScreenHandler;
+import net.minecraft.screen.Property;
+import net.minecraft.screen.ScreenHandlerContext;
+import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.util.ActionResult;
-
 import org.jetbrains.annotations.Nullable;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Final;

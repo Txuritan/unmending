@@ -1,15 +1,13 @@
 {
-  "required": true,
-  "minVersion": "0.8",
-  "package": "dev.txuritan.unmending.mixins",
-  "compatibilityLevel": "JAVA_21",
-  "mixins": [
-    "AnvilScreenHandlerMixin",
-    "EnchantmentHelperMixin"
-  ],
-  "client": [
-  ],
-  "injectors": {
-    "defaultRequire": 1
-  }
+	"required": true,
+	"package": "dev.txuritan.unmending.mixins",
+	"compatibilityLevel": "JAVA_21",
+	"mixins": [
+		"AnvilScreenHandlerMixin",
+		"EnchantmentHelperMixin",
+		"ItemMixin"
+	],
+	"injectors": {
+		"defaultRequire": 1
+	}
 }

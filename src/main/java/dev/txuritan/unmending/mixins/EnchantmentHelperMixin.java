@@ -19,10 +19,10 @@ public abstract class EnchantmentHelperMixin {
 
 	@Inject(method = "chooseEquipmentWith", cancellable = true, at = @At("HEAD"))
 	private static void chooseEquipmentWith(
-			ComponentType<?> componentType,
-			LivingEntity entity,
-			Predicate<ItemStack> stackPredicate,
-			CallbackInfoReturnable<Optional<EnchantmentEffectContext>> cir
+		ComponentType<?> componentType,
+		LivingEntity entity,
+		Predicate<ItemStack> stackPredicate,
+		CallbackInfoReturnable<Optional<EnchantmentEffectContext>> cir
 	) {
 		if (componentType == EnchantmentEffectComponentTypes.REPAIR_WITH_XP) {
 			cir.setReturnValue(Optional.empty());
