@@ -42,30 +42,31 @@ public class Unmending implements ModInitializer {
                 }
             }
 
-            if (isMended) {
-                if (out.isEmpty()) {
-                    out = left.copy();
-                }
-
-                out.set(DataComponentTypes.ENCHANTMENTS, ItemEnchantmentsComponent.DEFAULT);
-
-                addEnchantments(enchantmentsLeft, out);
-                addEnchantments(enchantmentsRight, out);
-
-                out.set(DataComponentTypes.REPAIR_COST, 0);
-                if (out.isDamageable()) {
-                    out.setDamage(0);
-                }
-
-                event.setOutput(out);
-                if (event.getCost() == 0) {
-                    event.setCost(1);
-                }
-
-                return ActionResult.CONSUME;
+            if (!isMended) {
+                return ActionResult.PASS;
             }
 
-            return ActionResult.PASS;
+            if (out.isEmpty()) {
+                out = left.copy();
+            }
+
+            out.set(DataComponentTypes.ENCHANTMENTS, ItemEnchantmentsComponent.DEFAULT);
+
+            addEnchantments(enchantmentsLeft, out);
+            addEnchantments(enchantmentsRight, out);
+
+            out.set(DataComponentTypes.REPAIR_COST, 0);
+            if (out.isDamageable()) {
+                out.setDamage(0);
+            }
+
+            event.setOutput(out);
+            if (event.getCost() == 0) {
+                event.setCost(1);
+            }
+
+            return ActionResult.CONSUME;
+
         });
     }
 
