@@ -3,22 +3,24 @@ package dev.txuritan.unmending;
 import dev.txuritan.unmending.api.events.AnvilUpdateEvent;
 
 import net.fabricmc.api.ModInitializer;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.ItemEnchantmentsComponent;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.nbt.NbtCompound;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.util.ActionResult;
 
-import java.util.Map;
+import org.jetbrains.annotations.NotNull;
 
 public class Unmending implements ModInitializer {
     @Override
     public void onInitialize() {
         AnvilUpdateEvent.EVENT.register(event -> {
-            ItemStack left = event.getLeft();
-            ItemStack right = event.getRight();
+            final ItemStack left = event.getLeft();
+            final ItemStack right = event.getRight();
             ItemStack out = event.getOutput();
 
             if (out.isEmpty() && (left.isEmpty() || right.isEmpty())) {
@@ -27,10 +29,10 @@ public class Unmending implements ModInitializer {
 
             boolean isMended = false;
 
-            Map<Enchantment, Integer> enchantmentsLeft = EnchantmentHelper.get(left);
-            Map<Enchantment, Integer> enchantmentsRight = EnchantmentHelper.get(right);
+            final ItemEnchantmentsComponent enchantmentsLeft = EnchantmentHelper.getEnchantments(left);
+            final ItemEnchantmentsComponent enchantmentsRight = EnchantmentHelper.getEnchantments(right);
 
-            if (enchantmentsLeft.containsKey(Enchantments.MENDING) || enchantmentsRight.containsKey(Enchantments.MENDING)) {
+            if (hasMending(enchantmentsLeft) || hasMending(enchantmentsRight)) {
                 if (left.getItem() == right.getItem()) {
                     isMended = true;
                 }
@@ -45,16 +47,12 @@ public class Unmending implements ModInitializer {
                     out = left.copy();
                 }
 
-                if (!out.hasNbt()) {
-                    out.setNbt(new NbtCompound());
-                }
+                out.set(DataComponentTypes.ENCHANTMENTS, ItemEnchantmentsComponent.DEFAULT);
 
-                Map<Enchantment, Integer> enchantmentsOutput = EnchantmentHelper.get(out);
-                enchantmentsOutput.putAll(enchantmentsRight);
-                enchantmentsOutput.remove(Enchantments.MENDING);
-                EnchantmentHelper.set(enchantmentsOutput, out);
+                addEnchantments(enchantmentsLeft, out);
+                addEnchantments(enchantmentsRight, out);
 
-                out.setRepairCost(0);
+                out.set(DataComponentTypes.REPAIR_COST, 0);
                 if (out.isDamageable()) {
                     out.setDamage(0);
                 }
@@ -69,5 +67,27 @@ public class Unmending implements ModInitializer {
 
             return ActionResult.PASS;
         });
+    }
+
+    private static boolean hasMending(final @NotNull ItemEnchantmentsComponent enchantments) {
+        for (final RegistryEntry<Enchantment> enchantment : enchantments.getEnchantments()) {
+            if (enchantment.value() == Enchantments.MENDING) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private static void addEnchantments(final @NotNull ItemEnchantmentsComponent enchantments, final @NotNull ItemStack itemStack) {
+        for (final RegistryEntry<Enchantment> enchantmentEntry : enchantments.getEnchantments()) {
+            final Enchantment enchantment = enchantmentEntry.value();
+
+            if (enchantment == Enchantments.MENDING) {
+                continue;
+            }
+
+            itemStack.addEnchantment(enchantment, enchantments.getLevel(enchantment));
+        }
     }
 }
