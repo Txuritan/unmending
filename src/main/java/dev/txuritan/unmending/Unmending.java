@@ -71,7 +71,7 @@ public class Unmending implements ModInitializer {
 
     private static boolean hasMending(final @NotNull ItemEnchantmentsComponent enchantments) {
         for (final RegistryEntry<Enchantment> enchantment : enchantments.getEnchantments()) {
-            if (enchantment.value() == Enchantments.MENDING) {
+            if (enchantment.matchesKey(Enchantments.MENDING)) {
                 return true;
             }
         }
@@ -80,10 +80,8 @@ public class Unmending implements ModInitializer {
     }
 
     private static void addEnchantments(final @NotNull ItemEnchantmentsComponent enchantments, final @NotNull ItemStack itemStack) {
-        for (final RegistryEntry<Enchantment> enchantmentEntry : enchantments.getEnchantments()) {
-            final Enchantment enchantment = enchantmentEntry.value();
-
-            if (enchantment == Enchantments.MENDING) {
+        for (final RegistryEntry<Enchantment> enchantment : enchantments.getEnchantments()) {
+            if (enchantment.matchesKey(Enchantments.MENDING)) {
                 continue;
             }
 
