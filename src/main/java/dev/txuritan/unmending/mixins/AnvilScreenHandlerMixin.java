@@ -7,6 +7,7 @@ import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.*;
+import net.minecraft.screen.slot.ForgingSlotsManager;
 import net.minecraft.util.ActionResult;
 
 import org.jetbrains.annotations.Nullable;
@@ -28,9 +29,10 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
         @Nullable ScreenHandlerType<?> type,
         int syncId,
         PlayerInventory playerInventory,
-        ScreenHandlerContext context
+        ScreenHandlerContext context,
+        ForgingSlotsManager forgingSlotsManager
     ) {
-        super(type, syncId, playerInventory, context);
+        super(type, syncId, playerInventory, context, forgingSlotsManager);
     }
 
     @Inject(
