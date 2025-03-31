@@ -7,8 +7,10 @@ plugins {
 
 subprojects {
     ext {
-        set("modrinthId", "QYP9PZUS")
+        set("modrinthDebug", env.MODRINTH_DEBUG.orElse("false").toBoolean())
+        set("modrinthId", env.MODRINTH_ID.orNull())
         set("modrinthToken", env.MODRINTH_TOKEN.orNull())
+        set("modrinthType", env.MODRINTH_TYPE.orElse("release"))
 
         set("modVersion", "1.0.5")
         set("mavenGroup", "dev.txuritan")

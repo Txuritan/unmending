@@ -4,8 +4,10 @@ plugins {
     id("maven-publish")
 }
 
+val modrinthDebug: Boolean by ext
 val modrinthId: String by ext
 val modrinthToken: String? by ext
+val modrinthType: String by ext
 
 // Java Properties
 val targetJavaVersion = 17
@@ -56,11 +58,12 @@ dependencies {
 modrinth {
     token.set(modrinthToken)
     projectId.set(modrinthId)
-    versionNumber.set(modVersion)
-    versionType.set("release")
+    versionNumber.set("$modVersion+$minecraftVersion")
+    versionType.set(modrinthType)
     uploadFile.set(tasks.remapJar)
     gameVersions.addAll(minecraftVersion)
     loaders.add("fabric")
+    debugMode.set(modrinthDebug)
     dependencies {
         required.project("fabric-api")
     }
@@ -68,7 +71,7 @@ modrinth {
 
 tasks {
     processResources {
-        inputs.property("version", project.version)
+        inputs.property("version", "$modVersion+$minecraftVersion")
         inputs.property("minecraft_version", minecraftVersion)
         inputs.property("loader_version", loaderVersion)
         filteringCharset = "UTF-8"
@@ -76,7 +79,7 @@ tasks {
         filesMatching("fabric.mod.json") {
             expand(
                 mapOf(
-                    "version" to project.version,
+                    "version" to "$modVersion+$minecraftVersion",
                     "minecraft_version" to minecraftVersion,
                     "loader_version" to loaderVersion
                 )
