@@ -16,7 +16,7 @@ subprojects {
         set("modrinthToken", env.MODRINTH_TOKEN.orNull())
         set("modrinthType", env.MODRINTH_TYPE.orElse("release"))
 
-        set("modVersion", "1.0.6")
+        set("modVersion", "1.0.7")
         set("mavenGroup", "dev.txuritan")
         set("modArchivesBaseName", "unmending")
     }
