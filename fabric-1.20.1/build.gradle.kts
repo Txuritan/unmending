@@ -1,8 +1,14 @@
+import net.darkhax.curseforgegradle.TaskPublishCurseForge
+import org.gradle.kotlin.dsl.register
+
 plugins {
     id("fabric-loom")
     id("com.modrinth.minotaur")
     id("maven-publish")
 }
+
+val curseforgeId: String? by ext
+val curseforgeToken: String? by ext
 
 val modrinthDebug: Boolean by ext
 val modrinthId: String by ext
@@ -102,6 +108,18 @@ tasks {
         if (targetJavaVersion >= 10 || JavaVersion.current().isJava10Compatible) {
             options.release.set(targetJavaVersion)
         }
+    }
+
+    register<TaskPublishCurseForge>("publishCurseForge") {
+        disableVersionDetection()
+
+        apiToken = curseforgeToken
+
+        val file = upload(curseforgeId, remapJar)
+        file.changelog = ""
+        file.releaseType = "release"
+        file.addModLoader("Fabric")
+        file.addGameVersion(minecraftVersion)
     }
 }
 

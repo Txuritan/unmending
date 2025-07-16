@@ -15,59 +15,60 @@ import java.util.Map;
 public class Unmending implements ModInitializer {
     @Override
     public void onInitialize() {
-        AnvilUpdateEvent.EVENT.register(event -> {
-            final ItemStack left = event.getLeft();
-            final ItemStack right = event.getRight();
-            ItemStack out = event.getOutput();
+        AnvilUpdateEvent.EVENT.register(Unmending::repairNotEnchant);
+    }
 
-            if (out.isEmpty() && (left.isEmpty() || right.isEmpty())) {
-                return ActionResult.PASS;
+    private static ActionResult repairNotEnchant(AnvilUpdateEvent event) {
+        final ItemStack left = event.getLeft();
+        final ItemStack right = event.getRight();
+        ItemStack out = event.getOutput();
+
+        if (out.isEmpty() && (left.isEmpty() || right.isEmpty())) {
+            return ActionResult.PASS;
+        }
+
+        boolean isMended = false;
+
+        final Map<Enchantment, Integer> enchantmentsLeft = EnchantmentHelper.get(left);
+        final Map<Enchantment, Integer> enchantmentsRight = EnchantmentHelper.get(right);
+
+        if (enchantmentsLeft.containsKey(Enchantments.MENDING) || enchantmentsRight.containsKey(Enchantments.MENDING)) {
+            if (left.getItem() == right.getItem()) {
+                isMended = true;
             }
 
-            boolean isMended = false;
-
-            final Map<Enchantment, Integer> enchantmentsLeft = EnchantmentHelper.get(left);
-            final Map<Enchantment, Integer> enchantmentsRight = EnchantmentHelper.get(right);
-
-            if (enchantmentsLeft.containsKey(Enchantments.MENDING) || enchantmentsRight.containsKey(Enchantments.MENDING)) {
-                if (left.getItem() == right.getItem()) {
-                    isMended = true;
-                }
-
-                if (right.getItem() == Items.ENCHANTED_BOOK) {
-                    isMended = true;
-                }
+            if (right.getItem() == Items.ENCHANTED_BOOK) {
+                isMended = true;
             }
+        }
 
-            if (!isMended) {
-                return ActionResult.PASS;
-            }
+        if (!isMended) {
+            return ActionResult.PASS;
+        }
 
-            if (out.isEmpty()) {
-                out = left.copy();
-            }
+        if (out.isEmpty()) {
+            out = left.copy();
+        }
 
-            if (!out.hasNbt()) {
-                out.setNbt(new NbtCompound());
-            }
+        if (!out.hasNbt()) {
+            out.setNbt(new NbtCompound());
+        }
 
-            final Map<Enchantment, Integer> enchantmentsOutput = EnchantmentHelper.get(out);
-            enchantmentsOutput.putAll(enchantmentsRight);
-            enchantmentsOutput.remove(Enchantments.MENDING);
-            EnchantmentHelper.set(enchantmentsOutput, out);
+        final Map<Enchantment, Integer> enchantmentsOutput = EnchantmentHelper.get(out);
+        enchantmentsOutput.putAll(enchantmentsRight);
+        enchantmentsOutput.remove(Enchantments.MENDING);
+        EnchantmentHelper.set(enchantmentsOutput, out);
 
-            out.setRepairCost(0);
-            if (out.isDamageable()) {
-                out.setDamage(0);
-            }
+        out.setRepairCost(0);
+        if (out.isDamageable()) {
+            out.setDamage(0);
+        }
 
-            event.setOutput(out);
-            if (event.getCost() == 0) {
-                event.setCost(1);
-            }
+        event.setOutput(out);
+        if (event.getCost() == 0) {
+            event.setCost(1);
+        }
 
-            return ActionResult.CONSUME;
-
-        });
+        return ActionResult.CONSUME;
     }
 }
